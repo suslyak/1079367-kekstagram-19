@@ -26,7 +26,11 @@ var getRandomIntInclusive = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var createMockPicturesData = function (numberOfPictures) {
+var getRandomArrayElement = function (array) {
+  return array[getRandomIntInclusive(0, array.length)];
+};
+
+var createmockPicturesData = function (numberOfPictures) {
   var mockObjects = [];
 
   for (var i = 1; i < numberOfPictures + 1; i++) {
@@ -35,8 +39,8 @@ var createMockPicturesData = function (numberOfPictures) {
     for (var j = 0; j < getRandomIntInclusive(1, 5); j++) {
       var mockComment = {
         avatar: 'img/avatar-' + getRandomIntInclusive(1, 6) + '.svg',
-        message: MockData.COMMENTS_MESSAGES[Math.floor(Math.random() * MockData.COMMENTS_MESSAGES.length)],
-        name: MockData.COMMENTS_NAMES[Math.floor(Math.random() * MockData.COMMENTS_NAMES.length)]
+        message: getRandomArrayElement(MockData.COMMENTS_MESSAGES),
+        name: getRandomArrayElement(MockData.COMMENTS_NAMES)
       };
 
       mockComments.push(mockComment);
@@ -50,35 +54,32 @@ var createMockPicturesData = function (numberOfPictures) {
     });
   }
 
-  mockComment = null;
   return mockObjects;
 };
 
-var createMockPictures = function () {
-  var MockPictures = createMockPicturesData(25);
+var createmockPictures = function () {
+  var mockPictures = createmockPicturesData(25);
   var pictureTemplate = document.querySelector('#picture')
       .content
       .querySelector('.picture');
 
-  for (var i = 0; i < MockPictures.length; i++) {
+  mockPictures.forEach(function (element) {
     var picture = pictureTemplate.cloneNode(true);
 
-    picture.querySelector('.picture__img').setAttribute('src', MockPictures[i].url);
-    picture.querySelector('.picture__comments').innerText = MockPictures[i].comments.length;
-    picture.querySelector('.picture__likes').innerText = MockPictures[i].likes;
+    picture.querySelector('.picture__img').setAttribute('src', element.url);
+    picture.querySelector('.picture__comments').innerText = element.comments.length;
+    picture.querySelector('.picture__likes').innerText = element.likes;
 
     fragment.appendChild(picture);
-  }
+
+  });
 
   return fragment;
 };
 
-var insertMockPictures = function () {
+var insertmockPictures = function () {
   var picturesContainer = document.querySelector('.pictures');
-  picturesContainer.appendChild(createMockPictures());
-  fragment.innerHTML = '';
-
-  return null;
+  picturesContainer.appendChild(createmockPictures());
 };
 
-insertMockPictures();
+insertmockPictures();
