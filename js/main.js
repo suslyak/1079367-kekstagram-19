@@ -27,7 +27,7 @@ var getRandomIntInclusive = function (min, max) {
 };
 
 var getRandomArrayElement = function (array) {
-  return array[getRandomIntInclusive(0, array.length)];
+  return array[getRandomIntInclusive(0, array.length - 1)];
 };
 
 var createmockPicturesData = function (numberOfPictures) {
