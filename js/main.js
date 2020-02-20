@@ -106,7 +106,7 @@ var createMockPictures = function () {
   var pictureTemplate = document.querySelector('#picture')
       .content
       .querySelector('.picture');
-
+  
   setInitialPicture(initialPicture);
 
   mockPictures.forEach(function (element) {
@@ -117,7 +117,6 @@ var createMockPictures = function () {
     picture.querySelector('.picture__likes').innerText = element.likes;
 
     fragment.appendChild(picture);
-
   });
 
   return fragment;
