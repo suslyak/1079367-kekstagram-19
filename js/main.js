@@ -31,11 +31,9 @@ var getRandomArrayElement = function (array) {
 };
 
 var setAttributes = function (element, attributes) {
-  for (var key in attributes) {
-    if (attributes.hasOwnProperty(key)) {
-      element.setAttribute(key, attributes[key]);
-    }
-  }
+  Object.keys(attributes).forEach(function (key) {
+    element.setAttribute(key, attributes[key]);
+  });
 };
 
 var createmockPicturesData = function (numberOfPictures) {
@@ -66,25 +64,22 @@ var createmockPicturesData = function (numberOfPictures) {
 };
 
 var setInitialPicture = function (pictureObject) {
-  var bigPictureContainer = document.querySelector('.big-picture');
-  var bigPicture = bigPictureContainer.querySelector('.big-picture__img > img');
-  var bigPictureSocial = bigPictureContainer.querySelector('.big-picture__social');
-  var bigPictureLikes = bigPictureSocial.querySelector('.likes-count');
-  var bigPictureDescription = bigPictureSocial.querySelector('.social__caption');
-  var bigPictureCommentsCount = bigPictureContainer.querySelector('.social__comment-count');
-  var bigPictureComments = bigPictureContainer.querySelector('.social__comments');
-  var bigPictureCommentsLoader = bigPictureContainer.querySelector('.comments-loader');
-  var bigPictureCommentTemplate = bigPictureComments.querySelector('.social__comment');
+  var bigPictureContainerElement = document.querySelector('.big-picture');
+  var bigPictureElement = bigPictureContainerElement.querySelector('.big-picture__img > img');
+  var bigPictureSocialElement = bigPictureContainerElement.querySelector('.big-picture__social');
+  var bigPictureLikesElement = bigPictureSocialElement.querySelector('.likes-count');
+  var bigPictureDescriptionElement = bigPictureSocialElement.querySelector('.social__caption');
+  var bigPictureCommentsCountElement = bigPictureContainerElement.querySelector('.social__comment-count');
+  var bigPictureCommentsElement = bigPictureContainerElement.querySelector('.social__comments');
+  var bigPictureCommentsLoaderElement = bigPictureContainerElement.querySelector('.comments-loader');
+  var bigPictureCommentTemplate = bigPictureCommentsElement.querySelector('.social__comment');
 
-  if (bigPictureContainer.classList.contains('hidden')) {
-    bigPictureContainer.classList.remove('hidden');
-  }
-
-  bigPicture.setAttribute('src', pictureObject.url);
-  bigPictureLikes.innerText = pictureObject.likes;
-  bigPictureDescription.innerText = pictureObject.description;
-  bigPictureCommentsCount.innerText = pictureObject.comments.length;
-  bigPictureComments.innerHTML = '';
+  bigPictureContainerElement.classList.remove('hidden');
+  bigPictureElement.setAttribute('src', pictureObject.url);
+  bigPictureLikesElement.innerText = pictureObject.likes;
+  bigPictureDescriptionElement.innerText = pictureObject.description;
+  bigPictureCommentsCountElement.innerText = pictureObject.comments.length;
+  bigPictureCommentsElement.innerText = '';
 
   pictureObject.comments.forEach(function (element) {
     var listElement = bigPictureCommentTemplate.cloneNode(true);
@@ -92,11 +87,11 @@ var setInitialPicture = function (pictureObject) {
     setAttributes(listElement.querySelector('.social__picture'), {'src': element.avatar, 'alt': element.name});
     listElement.querySelector('.social__text').innerText = element.message;
 
-    bigPictureComments.appendChild(listElement);
+    bigPictureCommentsElement.appendChild(listElement);
   });
 
-  bigPictureCommentsCount.classList.add('hidden');
-  bigPictureCommentsLoader.classList.add('hidden');
+  bigPictureCommentsCountElement.classList.add('hidden');
+  bigPictureCommentsLoaderElement.classList.add('hidden');
   document.querySelector('body').classList.add('modal-open');
 };
 
@@ -123,8 +118,8 @@ var createMockPictures = function () {
 };
 
 var insertMockPictures = function () {
-  var picturesContainer = document.querySelector('.pictures');
-  picturesContainer.appendChild(createMockPictures());
+  var picturesContainerElement = document.querySelector('.pictures');
+  picturesContainerElement.appendChild(createMockPictures());
 };
 
 insertMockPictures();
