@@ -106,7 +106,7 @@ var createMockPictures = function () {
   var pictureTemplate = document.querySelector('#picture')
       .content
       .querySelector('.picture');
-  
+
   setInitialPicture(initialPicture);
 
   mockPictures.forEach(function (element) {
