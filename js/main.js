@@ -149,7 +149,6 @@ var filterEffectLevelDepthElement = filterEffectLevelElement.querySelector('.eff
 var scaleSmallerElement = uploadOverlayElement.querySelector('.scale__control--smaller');
 var scaleBiggerElement = uploadOverlayElement.querySelector('.scale__control--bigger');
 var scaleInput = uploadOverlayElement.querySelector('.scale__control--value');
-// var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
 
 var listenESCKey = function (event) {
   if (event.keyCode === 27) {
@@ -274,20 +273,5 @@ scaleBiggerElement.addEventListener('click', function () {
   scaleInput.setAttribute('value', intValue + '%');
   previewPictureElement.style.transform = 'scale(' + intValue / 100 + ')';
 });
-
-/*
-uploadFormElement.addEventListener('submit', function(event) {
-  event.preventDefault();
-  var validityMessage = '';
-  if (hashtagsInputElement.value) {
-    var hashtags = hashtagsInputElement.value.trim().split(' ');
-    for (var i=0; i < hashtags.length; i++) {
-      if (!/^#[aA-zZ0-9]/.test(hashtags[i])) {
-        hashtagsInputElement.setCustomValidity('...');
-      }
-    }
-  }
-});
-*/
 
 insertMockPictures();
