@@ -25,12 +25,12 @@ var Settings = {
   scaleRange: 25,
   initialFilterEffectsLevel: 100,
   filters: {
-  'none': {'effect': 'none'},
-  'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
-  'sepia': {'effect': 'sepia', 'range': [0, 1], 'measure': ''},
-  'marvin': {'effect': 'invert', 'range': [0, 100], 'measure': '%'},
-  'phobos': {'effect': 'blur', 'range': [0, 3], 'measure': 'px'},
-  'heat': {'effect': 'brightness', 'range': [1, 3], 'measure': ''},
+    'none': {'effect': 'none'},
+    'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
+    'sepia': {'effect': 'sepia', 'range': [0, 1], 'measure': ''},
+    'marvin': {'effect': 'invert', 'range': [0, 100], 'measure': '%'},
+    'phobos': {'effect': 'blur', 'range': [0, 3], 'measure': 'px'},
+    'heat': {'effect': 'brightness', 'range': [1, 3], 'measure': ''},
   }
 };
 
@@ -149,13 +149,13 @@ var filterEffectLevelDepthElement = filterEffectLevelElement.querySelector('.eff
 var scaleSmallerElement = uploadOverlayElement.querySelector('.scale__control--smaller');
 var scaleBiggerElement = uploadOverlayElement.querySelector('.scale__control--bigger');
 var scaleInput = uploadOverlayElement.querySelector('.scale__control--value');
-var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
+// var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
 
-var listenESCKey = function(event) {
-  if (event.keyCode==27) {
-      closeUploadHandler();
+var listenESCKey = function (event) {
+  if (event.keyCode === 27) {
+    closeUploadHandler();
   }
-}
+};
 
 var initUploadOverlay = function () {
   uploadEffectLevelElement.classList.add('hidden');
@@ -164,81 +164,78 @@ var initUploadOverlay = function () {
   scaleInput.setAttribute('value', Settings.initialScaleValue + '%');
   previewPictureElement.style.transform = 'scale(' + Settings.initialScaleValue / 100 + ')';
   applyFilterEffect(previewPictureElement, 'none');
-}
+};
 
-var closeUploadHandler = function() {
+var closeUploadHandler = function () {
   uploadOverlayElement.classList.add('hidden');
   uploadFileInputElement.value = '';
   document.querySelector('body').classList.remove('modal-open');
 
-  window.removeEventListener("keydown", listenESCKey);
-}
+  window.removeEventListener('keydown', listenESCKey);
+};
 
-var openUploadHandler = function() {
+var openUploadHandler = function () {
   initUploadOverlay();
 
   uploadOverlayElement.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
 
-  window.addEventListener("keydown", listenESCKey);
-}
+  window.addEventListener('keydown', listenESCKey);
+};
 
 var getFilterLevelValue = function () {
   var levelValue = (filterEffectLevelPinElement.offsetLeft / filterEffectLevelLineElement.offsetWidth) * 100;
 
   return Math.round(levelValue);
-}
+};
 
 var setFilterLevelElements = function (level) {
   var filterLevelInput = filterEffectLevelElement.querySelector('input[name=\'effect-level\']');
 
-  filterEffectLevelPinElement.style.left = level +'%';
-  filterEffectLevelDepthElement.style.width = level +'%';
+  filterEffectLevelPinElement.style.left = level + '%';
+  filterEffectLevelDepthElement.style.width = level + '%';
 
   filterLevelInput.setAttribute('value', level);
   filterLevelInput.value = level; // не знаю что лучше.
-}
+};
 
 var applyFilterEffect = function (element, filter) {
   var filterName = filter;
   var effectProportion = getFilterLevelValue() / 100;
   var effectValue = '';
+  var filterToApply = '';
 
   if (Settings.filters[filterName]) {
-    var filter = Settings.filters[filterName];
-  }
-  else {
-    var filter = Settings.filters['none'];
+    filterToApply = Settings.filters[filterName];
+  } else {
+    filterToApply = Settings.filters['none'];
   }
 
-  previewPictureElement.setAttribute('class','effects__preview--' + filterName);
+  previewPictureElement.setAttribute('class', 'effects__preview--' + filterName);
 
-  if (filter.range) {
+  if (filterToApply.range) {
     effectValue = '(';
-    effectValue += effectProportion * filter.range[1];
+    effectValue += effectProportion * filterToApply.range[1];
 
-    if (filter.measure) {
-      effectValue += filter.measure;
+    if (filterToApply.measure) {
+      effectValue += filterToApply.measure;
     }
 
     effectValue += ')';
   }
 
-  element.style.filter = filter.effect + effectValue;
-
-  return element.style.filter;
-}
+  element.style.filter = filterToApply.effect + effectValue;
+};
 
 uploadEffectElements.forEach(function (filter) {
   filter.addEventListener('click', function () {
-    var filterName = filter.getAttribute('id').replace('effect-','');
+    var filterName = filter.getAttribute('id').replace('effect-', '');
 
     setFilterLevelElements(Settings.initialFilterEffectsLevel);
 
-    if (filterName != 'none') {
+    if (filterName !== 'none') {
       uploadEffectLevelElement.classList.remove('hidden');
-    }
-    else {
+    } else {
       uploadEffectLevelElement.classList.add('hidden');
     }
 
@@ -247,7 +244,7 @@ uploadEffectElements.forEach(function (filter) {
 });
 
 filterEffectLevelPinElement.addEventListener('mouseup', function () {
-  var modificator = previewPictureElement.getAttribute('class').replace('effects__preview--','');
+  var modificator = previewPictureElement.getAttribute('class').replace('effects__preview--', '');
   setFilterLevelElements(getFilterLevelValue());
   applyFilterEffect(previewPictureElement, modificator);
 });
@@ -256,7 +253,7 @@ uploadFileInputElement.addEventListener('change', openUploadHandler);
 uploadCloseElement.addEventListener('click', closeUploadHandler);
 
 scaleSmallerElement.addEventListener('click', function () {
-  var intValue = parseInt(scaleInput.getAttribute('value'));
+  var intValue = parseInt(scaleInput.getAttribute('value'), 10);
   if (intValue > Settings.scaleRange) {
     intValue -= Settings.scaleRange;
     scaleInput.setAttribute('value', intValue + '%');
@@ -265,7 +262,7 @@ scaleSmallerElement.addEventListener('click', function () {
 });
 
 scaleBiggerElement.addEventListener('click', function () {
-  var intValue = parseInt(scaleInput.getAttribute('value'));
+  var intValue = parseInt(scaleInput.getAttribute('value'), 10);
 
   if (intValue < 100) {
     intValue += Settings.scaleRange;
@@ -278,7 +275,8 @@ scaleBiggerElement.addEventListener('click', function () {
   previewPictureElement.style.transform = 'scale(' + intValue / 100 + ')';
 });
 
-/*uploadFormElement.addEventListener('submit', function(event) {
+/*
+uploadFormElement.addEventListener('submit', function(event) {
   event.preventDefault();
   var validityMessage = '';
   if (hashtagsInputElement.value) {
@@ -289,6 +287,7 @@ scaleBiggerElement.addEventListener('click', function () {
       }
     }
   }
-});*/
+});
+*/
 
 insertMockPictures();
