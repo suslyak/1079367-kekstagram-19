@@ -20,17 +20,19 @@ var MockData = {
   ]
 };
 
-var filterEffectsLevel = 20;
-
-var filters = {
+var Settings = {
+  initialScaleValue: 100,
+  scaleRange: 25,
+  initialFilterEffectsLevel: 100,
+  filters: {
   'none': {'effect': 'none'},
   'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
   'sepia': {'effect': 'sepia', 'range': [0, 1], 'measure': ''},
-  'marvin': {'effect': 'invert', 'range': [0, 1], 'measure': '%'},
+  'marvin': {'effect': 'invert', 'range': [0, 100], 'measure': '%'},
   'phobos': {'effect': 'blur', 'range': [0, 3], 'measure': 'px'},
   'heat': {'effect': 'brightness', 'range': [1, 3], 'measure': ''},
-}
-
+  }
+};
 
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
@@ -140,7 +142,14 @@ var uploadCloseElement = uploadOverlayElement.querySelector('.img-upload__cancel
 var uploadEffectLevelElement = uploadOverlayElement.querySelector('.img-upload__effect-level');
 var uploadEffectElements = uploadOverlayElement.querySelectorAll('.effects__radio');
 var previewPictureElement = uploadOverlayElement.querySelector('.img-upload__preview > img');
-var filterEffectLevelPinElement = uploadOverlayElement.querySelector('.effect-level__pin');
+var filterEffectLevelElement = uploadOverlayElement.querySelector('.img-upload__effect-level');
+var filterEffectLevelLineElement = uploadOverlayElement.querySelector('.effect-level__line');
+var filterEffectLevelPinElement = filterEffectLevelElement.querySelector('.effect-level__pin');
+var filterEffectLevelDepthElement = filterEffectLevelElement.querySelector('.effect-level__depth');
+var scaleSmallerElement = uploadOverlayElement.querySelector('.scale__control--smaller');
+var scaleBiggerElement = uploadOverlayElement.querySelector('.scale__control--bigger');
+var scaleInput = uploadOverlayElement.querySelector('.scale__control--value');
+var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
 
 var listenESCKey = function(event) {
   if (event.keyCode==27) {
@@ -148,33 +157,68 @@ var listenESCKey = function(event) {
   }
 }
 
+var initUploadOverlay = function () {
+  uploadEffectLevelElement.classList.add('hidden');
+  uploadEffectElements[0].checked = true;
+
+  scaleInput.setAttribute('value', Settings.initialScaleValue + '%');
+  previewPictureElement.style.transform = 'scale(' + Settings.initialScaleValue / 100 + ')';
+  applyFilterEffect(previewPictureElement, 'none');
+}
+
 var closeUploadHandler = function() {
   uploadOverlayElement.classList.add('hidden');
   uploadFileInputElement.value = '';
   document.querySelector('body').classList.remove('modal-open');
+
   window.removeEventListener("keydown", listenESCKey);
 }
 
 var openUploadHandler = function() {
-  uploadEffectLevelElement.classList.add('hidden');
-  uploadEffectElements[0].checked = true;
+  initUploadOverlay();
+
   uploadOverlayElement.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
 
   window.addEventListener("keydown", listenESCKey);
 }
 
-var applyFilterEffect = function (element,filter) {
-  var filter = filters[filter];
-  var effectProportion = filterEffectsLevel / 100;
+var getFilterLevelValue = function () {
+  var levelValue = (filterEffectLevelPinElement.offsetLeft / filterEffectLevelLineElement.offsetWidth) * 100;
+
+  return Math.round(levelValue);
+}
+
+var setFilterLevelElements = function (level) {
+  var filterLevelInput = filterEffectLevelElement.querySelector('input[name=\'effect-level\']');
+
+  filterEffectLevelPinElement.style.left = level +'%';
+  filterEffectLevelDepthElement.style.width = level +'%';
+
+  filterLevelInput.setAttribute('value', level);
+  filterLevelInput.value = level; // не знаю что лучше.
+}
+
+var applyFilterEffect = function (element, filter) {
+  var filterName = filter;
+  var effectProportion = getFilterLevelValue() / 100;
   var effectValue = '';
+
+  if (Settings.filters[filterName]) {
+    var filter = Settings.filters[filterName];
+  }
+  else {
+    var filter = Settings.filters['none'];
+  }
+
+  previewPictureElement.setAttribute('class','effects__preview--' + filterName);
 
   if (filter.range) {
     effectValue = '(';
     effectValue += effectProportion * filter.range[1];
 
     if (filter.measure) {
-      effectValue += effect.measure;
+      effectValue += filter.measure;
     }
 
     effectValue += ')';
@@ -187,16 +231,64 @@ var applyFilterEffect = function (element,filter) {
 
 uploadEffectElements.forEach(function (filter) {
   filter.addEventListener('click', function () {
-    var modificator = filter.getAttribute('id').replace('effect-','');
-    if (modificator != 'none') {
+    var filterName = filter.getAttribute('id').replace('effect-','');
+
+    setFilterLevelElements(Settings.initialFilterEffectsLevel);
+
+    if (filterName != 'none') {
       uploadEffectLevelElement.classList.remove('hidden');
     }
-    previewPictureElement.setAttribute('class','effects__preview--' + modificator);
+    else {
+      uploadEffectLevelElement.classList.add('hidden');
+    }
 
+    applyFilterEffect(previewPictureElement, filterName);
   });
+});
+
+filterEffectLevelPinElement.addEventListener('mouseup', function () {
+  var modificator = previewPictureElement.getAttribute('class').replace('effects__preview--','');
+  setFilterLevelElements(getFilterLevelValue());
+  applyFilterEffect(previewPictureElement, modificator);
 });
 
 uploadFileInputElement.addEventListener('change', openUploadHandler);
 uploadCloseElement.addEventListener('click', closeUploadHandler);
+
+scaleSmallerElement.addEventListener('click', function () {
+  var intValue = parseInt(scaleInput.getAttribute('value'));
+  if (intValue > Settings.scaleRange) {
+    intValue -= Settings.scaleRange;
+    scaleInput.setAttribute('value', intValue + '%');
+    previewPictureElement.style.transform = 'scale(' + intValue / 100 + ')';
+  }
+});
+
+scaleBiggerElement.addEventListener('click', function () {
+  var intValue = parseInt(scaleInput.getAttribute('value'));
+
+  if (intValue < 100) {
+    intValue += Settings.scaleRange;
+  }
+  if (intValue % 100 < Settings.scaleRange) {
+    intValue -= intValue % 100;
+  }
+
+  scaleInput.setAttribute('value', intValue + '%');
+  previewPictureElement.style.transform = 'scale(' + intValue / 100 + ')';
+});
+
+/*uploadFormElement.addEventListener('submit', function(event) {
+  event.preventDefault();
+  var validityMessage = '';
+  if (hashtagsInputElement.value) {
+    var hashtags = hashtagsInputElement.value.trim().split(' ');
+    for (var i=0; i < hashtags.length; i++) {
+      if (!/^#[aA-zZ0-9]/.test(hashtags[i])) {
+        hashtagsInputElement.setCustomValidity('...');
+      }
+    }
+  }
+});*/
 
 insertMockPictures();
