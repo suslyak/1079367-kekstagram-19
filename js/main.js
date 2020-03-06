@@ -315,4 +315,12 @@ hashtagsInputElement.addEventListener('input', function (event) {
   hashtagsInputElement.setCustomValidity(validityMessage);
 });
 
+hashtagsInputElement.addEventListener('focus', function () {
+  window.removeEventListener('keydown', listenESCKey);
+});
+
+hashtagsInputElement.addEventListener('blur', function () {
+  window.addEventListener('keydown', listenESCKey);
+});
+
 insertMockPictures();
