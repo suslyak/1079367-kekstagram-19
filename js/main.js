@@ -149,6 +149,7 @@ var filterEffectLevelDepthElement = filterEffectLevelElement.querySelector('.eff
 var scaleSmallerElement = uploadOverlayElement.querySelector('.scale__control--smaller');
 var scaleBiggerElement = uploadOverlayElement.querySelector('.scale__control--bigger');
 var scaleInput = uploadOverlayElement.querySelector('.scale__control--value');
+var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
 
 var listenESCKey = function (event) {
   if (event.keyCode === 27) {
@@ -162,6 +163,7 @@ var initUploadOverlay = function () {
 
   scaleInput.setAttribute('value', Settings.initialScaleValue + '%');
   previewPictureElement.style.transform = 'scale(' + Settings.initialScaleValue / 100 + ')';
+
   applyFilterEffect(previewPictureElement, 'none');
 };
 
@@ -244,6 +246,7 @@ uploadEffectElements.forEach(function (filter) {
 
 filterEffectLevelPinElement.addEventListener('mouseup', function () {
   var modificator = previewPictureElement.getAttribute('class').replace('effects__preview--', '');
+
   setFilterLevelElements(getFilterLevelValue());
   applyFilterEffect(previewPictureElement, modificator);
 });
@@ -253,6 +256,7 @@ uploadCloseElement.addEventListener('click', closeUploadHandler);
 
 scaleSmallerElement.addEventListener('click', function () {
   var intValue = parseInt(scaleInput.getAttribute('value'), 10);
+
   if (intValue > Settings.scaleRange) {
     intValue -= Settings.scaleRange;
     scaleInput.setAttribute('value', intValue + '%');
@@ -272,6 +276,43 @@ scaleBiggerElement.addEventListener('click', function () {
 
   scaleInput.setAttribute('value', intValue + '%');
   previewPictureElement.style.transform = 'scale(' + intValue / 100 + ')';
+});
+
+hashtagsInputElement.addEventListener('input', function (event) {
+  event.preventDefault();
+  var validityMessage = '';
+  if (hashtagsInputElement.value) {
+    var hashtagsInputValue = hashtagsInputElement.value.toLowerCase().trim();
+    var hashtags = hashtagsInputValue.split(' ');
+
+    if (hashtags.length > 5) {
+      validityMessage += 'Нельзя указать больше пяти хэш-тегов. ';
+    }
+
+    for (var i = 0; i < hashtags.length; i++) {
+      if (!/^#[a-z0-9]+$/.test(hashtags[i])) {
+        validityMessage += 'Хэш-тег должен начинаться с символа # (решётка). Хеш-тег не может состоять только из одной решётки, строка после решётки должна состоять из букв и чисел и не может содержать пробелы, символы пунктуации и спецсимволы. ';
+        break;
+      }
+
+      if (hashtags[i] > 20) {
+        validityMessage += 'Максимальная длина одного хэш-тега 20 символов, включая решётку. ';
+        break;
+      }
+
+      if (hashtags[i].split('#').length - 1 > 1) {
+        validityMessage += 'Хэш-теги разделяются пробелами. ';
+        break;
+      }
+
+      if (hashtagsInputValue.split(hashtags[i]).length > 2) {
+        validityMessage += 'Один и тот же хэш-тег не может быть использован дважды. ';
+        break;
+      }
+    }
+  }
+
+  hashtagsInputElement.setCustomValidity(validityMessage);
 });
 
 insertMockPictures();
