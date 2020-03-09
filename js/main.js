@@ -197,7 +197,6 @@ var setFilterLevelElements = function (level) {
   filterEffectLevelDepthElement.style.width = level + '%';
 
   filterLevelInput.setAttribute('value', level);
-  filterLevelInput.value = level; // не знаю что лучше.
 };
 
 var applyFilterEffect = function (element, filter) {
@@ -206,11 +205,7 @@ var applyFilterEffect = function (element, filter) {
   var effectValue = '';
   var filterToApply = '';
 
-  if (Settings.filters[filterName]) {
-    filterToApply = Settings.filters[filterName];
-  } else {
-    filterToApply = Settings.filters['none'];
-  }
+  filterToApply = Settings.filters[filterName] ? Settings.filters[filterName] : Settings.filters['none'];
 
   previewPictureElement.setAttribute('class', 'effects__preview--' + filterName);
 
