@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var fragment = document.createDocumentFragment();
+  var picturesContainerElement = document.querySelector('.pictures');
 
   var createMockPicturesData = function (numberOfPictures) {
     var mockObjects = [];
@@ -59,32 +60,60 @@
     bigPictureCommentsLoaderElement.classList.add('hidden');
   };
 
-  var createMockPictures = function () {
-    var mockPictures = createMockPicturesData(25);
-    var initialPicture = mockPictures[0];
-    var pictureTemplate = document.querySelector('#picture')
-        .content
-        .querySelector('.picture');
+  var createPictures = function (pictures) {
+    setInitialPicture(pictures[0]);
 
-    setInitialPicture(initialPicture);
-
-    mockPictures.forEach(function (element) {
-      var picture = pictureTemplate.cloneNode(true);
-
-      picture.querySelector('.picture__img').setAttribute('src', element.url);
-      picture.querySelector('.picture__comments').innerText = element.comments.length;
-      picture.querySelector('.picture__likes').innerText = element.likes;
-
-      fragment.appendChild(picture);
+    pictures.forEach(function (picture) {
+      fragment.appendChild(window.picture.create(picture.url, picture.comments.length, picture.likes));
     });
 
     return fragment;
   };
 
-  var insertMockPictures = function () {
-    var picturesContainerElement = document.querySelector('.pictures');
-    picturesContainerElement.appendChild(createMockPictures());
+  var insertPictures = function (pictures) {
+
+    picturesContainerElement.appendChild(createPictures(pictures));
   };
 
-  insertMockPictures();
+  var successHandler = function (response) {
+    var pictures = [];
+    var limit = (window.settings.picturesOnPage <= response.length) ? window.settings.picturesOnPage : response.length;
+    for (var i = 0; i < limit; i++) {
+      var comments = [];
+
+      response[i].comments.forEach(function (comment) {
+        var commentObject = {
+          vatar: comment.avatar,
+          message: comment.message,
+          name: comment.name
+        };
+
+        comments.push(commentObject);
+      });
+
+      pictures.push({
+        url: response[i].url,
+        description: response[i].description,
+        likes: response[i].likes,
+        comments: comments
+      });
+    }
+
+    insertPictures(pictures);
+  };
+
+  var errorHandler = function (errorMessage, needMock) {
+    if (needMock) {
+      insertPictures(createMockPicturesData(window.settings.picturesOnPage));
+    } else {
+      var node = document.createElement('div');
+      node.style = 'text-align: center; background-color: lightcoral; text-transform: none; border-radius: 30px;';
+      node.style.padding = '20px';
+
+      node.textContent = errorMessage;
+      picturesContainerElement.appendChild(node);
+    }
+  };
+
+  window.load(successHandler, errorHandler);
 })();

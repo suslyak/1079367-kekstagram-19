@@ -20,6 +20,6 @@
   };
 
   window.data = {
-    MockData: MockData
+    MockData: MockData,
   };
 })();
