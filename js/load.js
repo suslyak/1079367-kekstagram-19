@@ -9,16 +9,16 @@
   window.load = function (successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    /*
+
     xhr.addEventListener('load', function () {
       if (xhr.status === StatusCode.OK) {
         successHandler(xhr.response);
       } else {
         errorHandler('Статус ответа: ' + xhr.status + ' ' + xhr.statusText, false);
       }
-    });*/
-    xhr.addEventListener('load', function () {
-      errorHandler('Произошла ошибка соединения', true);
+    });
+    xhr.addEventListener('error', function () {
+      errorHandler('Произошла ошибка соединения', false);
     });
     xhr.addEventListener('timeout', function () {
       errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс', false);
