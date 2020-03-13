@@ -81,15 +81,15 @@
     for (var i = 0; i < limit; i++) {
       var comments = [];
 
-      for (var j = 0; j < response[i].comments.length; j++) {
-        var comment = {
-          avatar: response[i].comments[j].avatar,
-          message: response[i].comments[j].message,
-          name: response[i].comments[j].name
+      response[i].comments.forEach(function (comment) {
+        var commentObject = {
+          vatar: comment.avatar,
+          message: comment.message,
+          name: comment.name
         };
 
-        comments.push(comment);
-      }
+        comments.push(commentObject);
+      });
 
       pictures.push({
         url: response[i].url,
