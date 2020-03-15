@@ -139,7 +139,7 @@
     previewPictureElement.style.transform = 'scale(' + intValue / 100 + ')';
   });
 
-  hashtagsInputElement.addEventListener('input', function (event) {
+  hashtagsInputElement.addEventListener('input', function () {
     var validityMessage = '';
     if (hashtagsInputElement.value) {
       var hashtagsInputValue = hashtagsInputElement.value.toLowerCase().trim();
@@ -175,7 +175,7 @@
     hashtagsInputElement.setCustomValidity(validityMessage);
   });
 
-  commentElement.addEventListener('input', function (event) {
+  commentElement.addEventListener('input', function () {
     var validityMessage = '';
     if (commentElement.value) {
       var commentElementValue = commentElement.value.toLowerCase().trim();
