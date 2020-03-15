@@ -67,7 +67,7 @@
 
       localStorage.setItem('picture' + counter, JSON.stringify(picture));
       fragment.appendChild(window.picture.create(counter, picture.url, picture.comments.length, picture.likes));
-      counter += 1;
+      counter++;
     });
 
     return fragment;

@@ -18,8 +18,8 @@
   var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
   var commentElement = uploadOverlayElement.querySelector('.text__description');
 
-  var ecsKey = function (event) {
-    window.utils.keyHandler(event, 27, closeUploadHandler);
+  var escKeyHandler = function (event) {
+    window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closeUploadHandler);
   };
 
   var initUploadOverlay = function () {
@@ -38,7 +38,7 @@
 
       window.utils.closePopup(uploadOverlayElement);
 
-      window.removeEventListener('keydown', ecsKey);
+      window.removeEventListener('keydown', escKeyHandler);
     }
   };
 
@@ -47,7 +47,7 @@
 
     window.utils.openPopup(uploadOverlayElement);
 
-    window.addEventListener('keydown', ecsKey);
+    window.addEventListener('keydown', escKeyHandler);
   };
 
   var getFilterLevelValue = function () {
@@ -140,13 +140,12 @@
   });
 
   hashtagsInputElement.addEventListener('input', function (event) {
-    event.preventDefault();
     var validityMessage = '';
     if (hashtagsInputElement.value) {
       var hashtagsInputValue = hashtagsInputElement.value.toLowerCase().trim();
       var hashtags = hashtagsInputValue.split(' ');
 
-      if (hashtags.length > 5) {
+      if (hashtags.length > window.settings.hashtagsMaxCount) {
         validityMessage += 'Нельзя указать больше пяти хэш-тегов. ';
       }
 
@@ -156,7 +155,7 @@
           break;
         }
 
-        if (hashtags[i] > 20) {
+        if (hashtags[i] > window.settings.hashtagMaxLength) {
           validityMessage += 'Максимальная длина одного хэш-тега 20 символов, включая решётку. ';
           break;
         }
@@ -177,11 +176,10 @@
   });
 
   commentElement.addEventListener('input', function (event) {
-    event.preventDefault();
     var validityMessage = '';
     if (commentElement.value) {
       var commentElementValue = commentElement.value.toLowerCase().trim();
-      if (commentElementValue.length > 140) {
+      if (commentElementValue.length > window.settings.commentMaxLength) {
         validityMessage += 'Длина комментария не может составлять больше 140 символов.';
       }
     }

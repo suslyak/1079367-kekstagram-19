@@ -5,6 +5,9 @@
     loadTimeout: 10000,
     initialScaleValue: 100,
     scaleRange: 25,
+    commentMaxLength: 140,
+    hashtagMaxLength: 20,
+    hashtagsMaxCount: 5,
     initialFilterEffectsLevel: 100,
     filters: {
       'none': {'effect': 'none'},

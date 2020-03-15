@@ -10,20 +10,20 @@
   var bigPictureCommentTemplate = bigPictureCommentsElement.querySelector('.social__comment');
   var bigPictureCloseElement = bigPictureContainerElement.querySelector('.big-picture__cancel');
 
-  var ecsKey = function (event) {
-    window.utils.keyHandler(event, 27, closePreviewHandler);
+  var escKeyHandler = function (event) {
+    window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closePreviewHandler);
   };
 
   var closePreviewHandler = function () {
     window.utils.closePopup(bigPictureContainerElement);
 
-    window.removeEventListener('keydown', ecsKey);
+    window.removeEventListener('keydown', escKeyHandler);
   };
 
   var openPreviewHandler = function () {
     window.utils.openPopup(bigPictureContainerElement);
 
-    window.addEventListener('keydown', ecsKey);
+    window.addEventListener('keydown', escKeyHandler);
   };
 
   var showPicture = function (id) {

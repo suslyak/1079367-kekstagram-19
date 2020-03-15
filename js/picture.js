@@ -16,7 +16,7 @@
     });
 
     picture.addEventListener('keydown', function (event) {
-      if (event.keyCode === 13) {
+      if (event.keyCode === window.data.ENTER_KEY_CODE) {
         window.preview.show(id);
       }
     });
