@@ -16,6 +16,11 @@
   var scaleBiggerElement = uploadOverlayElement.querySelector('.scale__control--bigger');
   var scaleInput = uploadOverlayElement.querySelector('.scale__control--value');
   var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
+  var commentElement = uploadOverlayElement.querySelector('.text__description');
+
+  var ecsKey = function (event) {
+    window.utils.keyHandler(event, 27, closeUploadHandler);
+  };
 
   var initUploadOverlay = function () {
     uploadEffectLevelElement.classList.add('hidden');
@@ -28,14 +33,12 @@
   };
 
   var closeUploadHandler = function () {
-    if (document.activeElement !== hashtagsInputElement) {
+    if (![hashtagsInputElement, commentElement].includes(document.activeElement)) {
       uploadFileInputElement.value = '';
 
       window.utils.closePopup(uploadOverlayElement);
 
-      window.removeEventListener('keydown', function (event) {
-        window.utils.escKeyHandler(event, closeUploadHandler);
-      });
+      window.removeEventListener('keydown', ecsKey);
     }
   };
 
@@ -44,9 +47,7 @@
 
     window.utils.openPopup(uploadOverlayElement);
 
-    window.addEventListener('keydown', function (event) {
-      window.utils.escKeyHandler(event, closeUploadHandler);
-    });
+    window.addEventListener('keydown', ecsKey);
   };
 
   var getFilterLevelValue = function () {
@@ -173,5 +174,18 @@
     }
 
     hashtagsInputElement.setCustomValidity(validityMessage);
+  });
+
+  commentElement.addEventListener('input', function (event) {
+    event.preventDefault();
+    var validityMessage = '';
+    if (commentElement.value) {
+      var commentElementValue = commentElement.value.toLowerCase().trim();
+      if (commentElementValue.length > 140) {
+        validityMessage += 'Длина комментария не может составлять больше 140 символов.';
+      }
+    }
+
+    commentElement.setCustomValidity(validityMessage);
   });
 })();

@@ -62,16 +62,18 @@
 
   var createPictures = function (pictures) {
     setInitialPicture(pictures[0]);
-
+    var counter = 1;
     pictures.forEach(function (picture) {
-      fragment.appendChild(window.picture.create(picture.url, picture.comments.length, picture.likes));
+
+      localStorage.setItem('picture' + counter, JSON.stringify(picture));
+      fragment.appendChild(window.picture.create(counter, picture.url, picture.comments.length, picture.likes));
+      counter += 1;
     });
 
     return fragment;
   };
 
   var insertPictures = function (pictures) {
-
     picturesContainerElement.appendChild(createPictures(pictures));
   };
 
