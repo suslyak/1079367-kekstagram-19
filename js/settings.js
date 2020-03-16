@@ -8,6 +8,7 @@
     commentMaxLength: 140,
     hashtagMaxLength: 20,
     hashtagsMaxCount: 5,
+    filterLevelBarLength: 453,
     initialFilterEffectsLevel: 100,
     filters: {
       'none': {'effect': 'none'},

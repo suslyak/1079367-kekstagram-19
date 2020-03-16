@@ -17,6 +17,7 @@
   var scaleInput = uploadOverlayElement.querySelector('.scale__control--value');
   var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
   var commentElement = uploadOverlayElement.querySelector('.text__description');
+  var filterLevelInput = filterEffectLevelElement.querySelector('input[name=\'effect-level\']');
 
   var escKeyHandler = function (event) {
     window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closeUploadHandler);
@@ -81,13 +82,53 @@
   };
 
   var setFilterLevelElements = function (level) {
-    var filterLevelInput = filterEffectLevelElement.querySelector('input[name=\'effect-level\']');
-
     filterEffectLevelPinElement.style.left = level + '%';
     filterEffectLevelDepthElement.style.width = level + '%';
 
     filterLevelInput.setAttribute('value', level);
   };
+
+  filterEffectLevelPinElement.addEventListener('mousedown', function (event) {
+    event.preventDefault();
+    var modificator = previewPictureElement.getAttribute('class').replace('effects__preview--', '');
+    var level = getFilterLevelValue();
+
+    var startCoords = {
+      x: event.clientX
+    };
+
+    var mouseMoveHandler = function (moveEvent) {
+      moveEvent.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvent.clientX
+      };
+
+      startCoords = {
+        x: moveEvent.clientX
+      };
+
+      if ((filterEffectLevelPinElement.offsetLeft - shift.x < window.settings.filterLevelBarLength) && (filterEffectLevelPinElement.offsetLeft - shift.x >= 0)) {
+        filterEffectLevelPinElement.style.left = filterEffectLevelPinElement.offsetLeft - shift.x + 'px';
+        level = getFilterLevelValue();
+        filterEffectLevelDepthElement.style.width = level + '%';
+        filterLevelInput.setAttribute('value', level);
+        applyFilterEffect(previewPictureElement, modificator);
+      }
+    };
+
+    var mouseUpHandler = function (upEvent) {
+      upEvent.preventDefault();
+
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+
+      setFilterLevelElements(getFilterLevelValue());
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  });
 
   uploadEffectElements.forEach(function (filter) {
     filter.addEventListener('click', function () {
@@ -103,13 +144,6 @@
 
       applyFilterEffect(previewPictureElement, filterName);
     });
-  });
-
-  filterEffectLevelPinElement.addEventListener('mouseup', function () {
-    var modificator = previewPictureElement.getAttribute('class').replace('effects__preview--', '');
-
-    setFilterLevelElements(getFilterLevelValue());
-    applyFilterEffect(previewPictureElement, modificator);
   });
 
   uploadFileInputElement.addEventListener('change', openUploadHandler);
