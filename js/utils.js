@@ -26,8 +26,8 @@
     document.querySelector('body').classList.add('modal-open');
   };
 
-  var escKeyHandler = function (event, action) {
-    if (event.keyCode === 27) {
+  var keyHandler = function (event, key, action) {
+    if (event.keyCode === key) {
       action();
     }
   };
@@ -38,6 +38,6 @@
     setAttributes: setAttributes,
     closePopup: closePopup,
     openPopup: openPopup,
-    escKeyHandler: escKeyHandler
+    keyHandler: keyHandler,
   };
 })();

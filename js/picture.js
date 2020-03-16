@@ -4,12 +4,22 @@
         .content
         .querySelector('.picture');
 
-  var createPicture = function (url, commentsCount, likes) {
+  var createPicture = function (id, url, commentsCount, likes) {
     var picture = pictureTemplate.cloneNode(true);
 
-    picture.querySelector('.picture__img').setAttribute('src', url);
+    window.utils.setAttributes(picture.querySelector('.picture__img'), {'src': url, 'data-id': id});
     picture.querySelector('.picture__comments').innerText = commentsCount;
     picture.querySelector('.picture__likes').innerText = likes;
+
+    picture.addEventListener('click', function () {
+      window.preview.show(id);
+    });
+
+    picture.addEventListener('keydown', function (event) {
+      if (event.keyCode === window.data.ENTER_KEY_CODE) {
+        window.preview.show(id);
+      }
+    });
 
     return picture;
   };
