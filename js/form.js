@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var mainElement = document.querySelector('main');
   var uploadElement = document.querySelector('.img-upload');
   var uploadFileInputElement = uploadElement.querySelector('.img-upload__input');
   var uploadFormElement = uploadElement.querySelector('.img-upload__form');
@@ -17,10 +18,24 @@
   var scaleInput = uploadOverlayElement.querySelector('.scale__control--value');
   var hashtagsInputElement = uploadOverlayElement.querySelector('.text__hashtags');
   var commentElement = uploadOverlayElement.querySelector('.text__description');
-  var filterLevelInput = filterEffectLevelElement.querySelector('input[name=\'effect-level\']');
+  var filterLevelInput = filterEffectLevelElement.querySelector('input[name="effect-level"]');
+  var successTemplate = document.querySelector('#success')
+        .content
+        .querySelector('.success');
+  var errorTemplate = document.querySelector('#error')
+        .content
+        .querySelector('.error');
+  var messageElement = null;
 
   var escKeyHandler = function (event) {
     window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closeUploadHandler);
+  };
+
+  var MessageEscKeyHandler = function (event) {
+    window.utils.keyHandler(event, window.data.ESC_KEY_CODE, function () {
+      closeFormMessage();
+      window.removeEventListener('keydown', MessageEscKeyHandler);
+    });
   };
 
   var initUploadOverlay = function () {
@@ -36,6 +51,8 @@
   var closeUploadHandler = function () {
     if (![hashtagsInputElement, commentElement].includes(document.activeElement)) {
       uploadFileInputElement.value = '';
+      hashtagsInputElement.value = '';
+      commentElement.value = '';
 
       window.utils.closePopup(uploadOverlayElement);
 
@@ -88,8 +105,39 @@
     filterLevelInput.setAttribute('value', level);
   };
 
+  var showFormResultMessage = function (template, messageText) {
+    var message = template.cloneNode(true);
+    var title = message.querySelector('h2');
+    var button = message.querySelector('button');
+
+    button.addEventListener('click', function () {
+      message.remove();
+    });
+
+    title.innerText = messageText;
+    messageElement = message;
+
+    mainElement.insertAdjacentElement('afterbegin', message);
+
+    window.addEventListener('keydown', MessageEscKeyHandler);
+    document.addEventListener('click', closeFormMessage);
+  };
+  var closeFormMessage = function () {
+    if (messageElement) {
+      messageElement.remove();
+    }
+    document.removeEventListener('click', closeFormMessage);
+  };
+
+  var successFormHandler = function (response) {
+    showFormResultMessage(successTemplate, response);
+  };
+
+  var errorFormHandler = function (response) {
+    showFormResultMessage(errorTemplate, response);
+  };
+
   filterEffectLevelPinElement.addEventListener('mousedown', function (event) {
-    event.preventDefault();
     var modificator = previewPictureElement.getAttribute('class').replace('effects__preview--', '');
     var level = getFilterLevelValue();
 
@@ -98,8 +146,6 @@
     };
 
     var mouseMoveHandler = function (moveEvent) {
-      moveEvent.preventDefault();
-
       var shift = {
         x: startCoords.x - moveEvent.clientX
       };
@@ -117,9 +163,7 @@
       }
     };
 
-    var mouseUpHandler = function (upEvent) {
-      upEvent.preventDefault();
-
+    var mouseUpHandler = function () {
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
 
@@ -219,5 +263,11 @@
     }
 
     commentElement.setCustomValidity(validityMessage);
+  });
+
+  uploadFormElement.addEventListener('submit', function (event) {
+    event.preventDefault();
+    window.transactions.upload(new FormData(uploadFormElement), successFormHandler, errorFormHandler);
+    closeUploadHandler();
   });
 })();

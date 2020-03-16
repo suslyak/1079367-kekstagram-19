@@ -117,5 +117,5 @@
     }
   };
 
-  window.load(successHandler, errorHandler);
+  window.transactions.load(successHandler, errorHandler);
 })();
