@@ -44,6 +44,17 @@
     return array;
   };
 
+  var getUniqueKeys = function (items) {
+    var unique = {};
+    items.forEach(function (item) {
+      if (!unique[item]) {
+        unique[item] = true;
+      }
+    });
+
+    return Object.keys(unique);
+  };
+
   window.utils = {
     getRandomIntInclusive: getRandomIntInclusive,
     getRandomArrayElement: getRandomArrayElement,
@@ -51,6 +62,7 @@
     closePopup: closePopup,
     openPopup: openPopup,
     keyHandler: keyHandler,
-    generateUniqueNumbers: generateUniqueNumbers
+    generateUniqueNumbers: generateUniqueNumbers,
+    getUniqueKeys: getUniqueKeys
   };
 })();

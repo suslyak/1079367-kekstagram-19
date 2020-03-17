@@ -3,6 +3,9 @@
   var fragment = document.createDocumentFragment();
   var picturesContainerElement = document.querySelector('.pictures');
   var filtersElement = document.querySelector('.img-filters');
+  var randomFilterElement = document.querySelector('#filter-random');
+  var discussedFilterElement = document.querySelector('#filter-discussed');
+  var defaultFilterElement = document.querySelector('#filter-default');
   window.defaultPictures = [];
 
   var createMockPicturesData = function (numberOfPictures) {
@@ -124,9 +127,10 @@
   var getRandomPictures = function (pictures) {
     var numberOfPictures = (window.settings.randomPicturesFilterCount) ? window.settings.randomPicturesFilterCount : 1;
     var randomPictures = [];
-    var uniqueUrls = new Set(pictures.map(function (picture) {
+    var urls = pictures.map(function (picture) {
       return picture.url;
-    }));
+    });
+    var uniqueUrls = window.utils.getUniqueKeys(urls);
     var uniquePictures = Array.from(uniqueUrls).map(function (url) {
       return pictures.find(function (picture) {
         return picture.url === url;
@@ -156,20 +160,19 @@
 
     insertPictures(filter(pictures));
   };
+  randomFilterElement.addEventListener('click', window.debounce(function () {
+    applyGalleryFilter(getRandomPictures, window.defaultPictures)
+  }));
 
-  document.querySelector('#filter-random').addEventListener('click', function () {
-    applyGalleryFilter(getRandomPictures, window.defaultPictures);
-  });
+  discussedFilterElement.addEventListener('click', window.debounce(function () {
+    applyGalleryFilter(filterPicturesByComments, window.defaultPictures)
+  }));
 
-  document.querySelector('#filter-discussed').addEventListener('click', function () {
-    applyGalleryFilter(filterPicturesByComments, window.defaultPictures);
-  });
-
-  document.querySelector('#filter-default').addEventListener('click', function () {
+  defaultFilterElement.addEventListener('click', window.debounce(function () {
     applyGalleryFilter(function (pictures) {
       return pictures;
     }, window.defaultPictures);
-  });
+  }));
 
   window.transactions.load(successHandler, errorHandler);
 })();
