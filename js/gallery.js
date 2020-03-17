@@ -161,11 +161,11 @@
     insertPictures(filter(pictures));
   };
   randomFilterElement.addEventListener('click', window.debounce(function () {
-    applyGalleryFilter(getRandomPictures, window.defaultPictures)
+    applyGalleryFilter(getRandomPictures, window.defaultPictures);
   }));
 
   discussedFilterElement.addEventListener('click', window.debounce(function () {
-    applyGalleryFilter(filterPicturesByComments, window.defaultPictures)
+    applyGalleryFilter(filterPicturesByComments, window.defaultPictures);
   }));
 
   defaultFilterElement.addEventListener('click', window.debounce(function () {
