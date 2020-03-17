@@ -2,6 +2,8 @@
 (function () {
   var fragment = document.createDocumentFragment();
   var picturesContainerElement = document.querySelector('.pictures');
+  var filtersElement = document.querySelector('.img-filters');
+  window.defaultPictures = [];
 
   var createMockPicturesData = function (numberOfPictures) {
     var mockObjects = [];
@@ -102,6 +104,8 @@
     }
 
     insertPictures(pictures);
+    filtersElement.classList.remove('img-filters--inactive');
+    window.defaultPictures = pictures;
   };
 
   var errorHandler = function (errorMessage, needMock) {
@@ -116,6 +120,56 @@
       picturesContainerElement.appendChild(node);
     }
   };
+
+  var getRandomPictures = function (pictures) {
+    var numberOfPictures = (window.settings.randomPicturesFilterCount) ? window.settings.randomPicturesFilterCount : 1;
+    var randomPictures = [];
+    var uniqueUrls = new Set(pictures.map(function (picture) {
+      return picture.url;
+    }));
+    var uniquePictures = Array.from(uniqueUrls).map(function (url) {
+      return pictures.find(function (picture) {
+        return picture.url === url;
+      });
+    });
+    var randomIndexes = (numberOfPictures < uniquePictures.length) ? window.utils.generateUniqueNumbers(numberOfPictures, uniquePictures.length - 1) : window.utils.generateUniqueNumbers(uniquePictures.length, uniquePictures.length - 1);
+    randomIndexes.forEach(function (index) {
+      randomPictures.push(uniquePictures[index]);
+    });
+
+    return randomPictures;
+  };
+
+  var filterPicturesByComments = function (pictures) {
+    var picturesArray = JSON.parse(JSON.stringify(pictures));
+    var filteredPictures = picturesArray.sort(function (a, b) {
+      return b.comments.length - a.comments.length;
+    });
+
+    return filteredPictures;
+  };
+
+  var applyGalleryFilter = function (filter, pictures) {
+    picturesContainerElement.querySelectorAll('.picture').forEach(function (element) {
+      element.remove();
+    });
+
+    insertPictures(filter(pictures));
+  };
+
+  document.querySelector('#filter-random').addEventListener('click', function () {
+    applyGalleryFilter(getRandomPictures, window.defaultPictures);
+  });
+
+  document.querySelector('#filter-discussed').addEventListener('click', function () {
+    applyGalleryFilter(filterPicturesByComments, window.defaultPictures);
+  });
+
+  document.querySelector('#filter-default').addEventListener('click', function () {
+    applyGalleryFilter(function (pictures) {
+      return pictures;
+    }, window.defaultPictures);
+  });
 
   window.transactions.load(successHandler, errorHandler);
 })();

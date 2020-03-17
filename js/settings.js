@@ -10,6 +10,7 @@
     hashtagsMaxCount: 5,
     filterLevelBarLength: 453,
     initialFilterEffectsLevel: 100,
+    randomPicturesFilterCount: 10,
     filters: {
       'none': {'effect': 'none'},
       'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},

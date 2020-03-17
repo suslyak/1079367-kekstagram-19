@@ -32,6 +32,18 @@
     }
   };
 
+  var generateUniqueNumbers = function (number, range) {
+    var array = [];
+    while (array.length < number) {
+      var randomNumber = getRandomIntInclusive(0, range);
+      if (array.indexOf(randomNumber) === -1) {
+        array.push(randomNumber);
+      }
+    }
+
+    return array;
+  };
+
   window.utils = {
     getRandomIntInclusive: getRandomIntInclusive,
     getRandomArrayElement: getRandomArrayElement,
@@ -39,5 +51,6 @@
     closePopup: closePopup,
     openPopup: openPopup,
     keyHandler: keyHandler,
+    generateUniqueNumbers: generateUniqueNumbers
   };
 })();
