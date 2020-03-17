@@ -1,18 +1,13 @@
 'use strict';
 (function () {
-  var DATA_URL = 'https://js.dump.academy/kekstagram/data';
-  var UPLOAD_URL = 'https://js.dump.academy/kekstagram';
-  var StatusCode = {
-    OK: 200
-  };
   var TIMEOUT = window.settings.loadTimeout;
 
-  var load = function (successHandler, errorHandler) {
+  var request = function (method, url, successHandler, errorHandler, data) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
+    xhr.responseType = window.settings.API_RESPONSE_TYPE;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === StatusCode.OK) {
+      if (xhr.status === window.settings.ApiStatusCode.OK) {
         successHandler(xhr.response);
       } else {
         errorHandler('Произошла ошибка. Статус ответа: ' + xhr.status + ' ' + xhr.statusText, false);
@@ -27,36 +22,14 @@
 
     xhr.timeout = TIMEOUT;
 
-    xhr.open('GET', DATA_URL);
-    xhr.send();
-  };
-
-  var upload = function (data, successHandler, errorHandler) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      if (xhr.status === StatusCode.OK) {
-        successHandler('Публикация отправлена на сервер');
-      } else {
-        errorHandler('Произошла ошибка. Статус ответа: ' + xhr.status + ' ' + xhr.statusText, false);
-      }
-    });
-    xhr.addEventListener('error', function () {
-      errorHandler('Произошла ошибка отправки данных на сервер', false);
-    });
-    xhr.addEventListener('timeout', function () {
-      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс', false);
-    });
-
-    xhr.timeout = TIMEOUT;
-
-    xhr.open('POST', UPLOAD_URL);
+    xhr.open(method, url);
+    /*if (data) {
+      xhr.send(data);
+    } else*/
     xhr.send(data);
   };
 
   window.transactions = {
-    load: load,
-    upload: upload
+    request: request
   };
 })();

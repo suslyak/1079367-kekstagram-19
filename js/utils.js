@@ -55,6 +55,10 @@
     return Object.keys(unique);
   };
 
+  var cloneObject = function (object) {
+    return JSON.parse(JSON.stringify(object));
+  };
+
   window.utils = {
     getRandomIntInclusive: getRandomIntInclusive,
     getRandomArrayElement: getRandomArrayElement,
@@ -63,6 +67,7 @@
     openPopup: openPopup,
     keyHandler: keyHandler,
     generateUniqueNumbers: generateUniqueNumbers,
-    getUniqueKeys: getUniqueKeys
+    getUniqueKeys: getUniqueKeys,
+    cloneObject: cloneObject
   };
 })();
