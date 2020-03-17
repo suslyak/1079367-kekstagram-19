@@ -268,7 +268,7 @@
 
   uploadFormElement.addEventListener('submit', function (event) {
     event.preventDefault();
-    window.transactions.request(window.setting.API_SAVE_METHOD, URL, successFormHandler, errorFormHandler, new FormData(uploadFormElement));
+    window.transactions.request(window.settings.API_SAVE_METHOD, URL, successFormHandler, errorFormHandler, new FormData(uploadFormElement));
     closeUploadHandler();
   });
 })();

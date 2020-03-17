@@ -8,7 +8,8 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === window.settings.ApiStatusCode.OK) {
-        successHandler(xhr.response);
+        var response = (data) ? 'Публикация загружена успешно.' : xhr.response;
+        successHandler(response);
       } else {
         errorHandler('Произошла ошибка. Статус ответа: ' + xhr.status + ' ' + xhr.statusText, false);
       }
@@ -23,9 +24,6 @@
     xhr.timeout = TIMEOUT;
 
     xhr.open(method, url);
-    /*if (data) {
-      xhr.send(data);
-    } else*/
     xhr.send(data);
   };
 
