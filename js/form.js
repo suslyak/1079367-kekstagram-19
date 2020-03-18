@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var URL = window.settings.API_URL;
+
   var mainElement = document.querySelector('main');
   var uploadElement = document.querySelector('.img-upload');
   var uploadFileInputElement = uploadElement.querySelector('.img-upload__input');
@@ -26,7 +28,6 @@
         .content
         .querySelector('.error');
   var messageElement = null;
-  var URL = window.settings.API_URL;
   var preventEscCloseElements = [hashtagsInputElement, commentElement];
 
   var escKeyHandler = function (event) {
@@ -61,8 +62,8 @@
       reader.readAsDataURL(file);
     }
 
-    scaleInput.setAttribute('value', window.settings.initialScaleValue + '%');
-    previewPictureElement.style.transform = 'scale(' + window.settings.initialScaleValue / 100 + ')';
+    scaleInput.setAttribute('value', window.settings.INITIAL_SCALE_VALUE + '%');
+    previewPictureElement.style.transform = 'scale(' + window.settings.INITIAL_SCALE_VALUE / 100 + ')';
 
     applyFilterEffect(previewPictureElement, 'none');
   };
@@ -173,7 +174,7 @@
         x: moveEvent.clientX
       };
 
-      if ((filterEffectLevelPinElement.offsetLeft - shift.x < window.settings.filterLevelBarLength) && (filterEffectLevelPinElement.offsetLeft - shift.x >= 0)) {
+      if ((filterEffectLevelPinElement.offsetLeft - shift.x < window.settings.FILTER_LEVEL_BAR_LENGTH) && (filterEffectLevelPinElement.offsetLeft - shift.x >= 0)) {
         filterEffectLevelPinElement.style.left = filterEffectLevelPinElement.offsetLeft - shift.x + 'px';
         level = getFilterLevelValue();
         filterEffectLevelDepthElement.style.width = level + '%';
@@ -201,7 +202,7 @@
     filter.addEventListener('click', function () {
       var filterName = filter.getAttribute('id').replace('effect-', '');
 
-      setFilterLevelElements(window.settings.initialFilterEffectsLevel);
+      setFilterLevelElements(window.settings.INITIAL_FILTER_EFFECTS_LEVEL);
 
       if (filterName !== 'none') {
         uploadEffectLevelElement.classList.remove('hidden');
@@ -219,8 +220,8 @@
   scaleSmallerElement.addEventListener('click', function () {
     var intValue = parseInt(scaleInput.getAttribute('value'), 10);
 
-    if (intValue > window.settings.scaleRange) {
-      intValue -= window.settings.scaleRange;
+    if (intValue > window.settings.SCALE_RANGE) {
+      intValue -= window.settings.SCALE_RANGE;
       scaleInput.setAttribute('value', intValue + '%');
       previewPictureElement.style.transform = 'scale(' + intValue / 100 + ')';
     }
@@ -230,9 +231,9 @@
     var intValue = parseInt(scaleInput.getAttribute('value'), 10);
 
     if (intValue < 100) {
-      intValue += window.settings.scaleRange;
+      intValue += window.settings.SCALE_RANGE;
     }
-    if (intValue % 100 < window.settings.scaleRange) {
+    if (intValue % 100 < window.settings.SCALE_RANGE) {
       intValue -= intValue % 100;
     }
 
@@ -246,8 +247,8 @@
       var hashtagsInputValue = hashtagsInputElement.value.toLowerCase().trim();
       var hashtags = hashtagsInputValue.split(' ');
 
-      if (hashtags.length > window.settings.hashtagsMaxCount) {
-        validityMessage += 'Нельзя указать больше пяти хэш-тегов. ';
+      if (hashtags.length > window.settings.HASHTAGS_MAX_COUNT) {
+        validityMessage += 'Нельзя указать больше чем' + window.settings.HASHTAGS_MAX_COUNT + 'хэш-тегов. ';
       }
 
       for (var i = 0; i < hashtags.length; i++) {
@@ -256,8 +257,8 @@
           break;
         }
 
-        if (hashtags[i] > window.settings.hashtagMaxLength) {
-          validityMessage += 'Максимальная длина одного хэш-тега 20 символов, включая решётку. ';
+        if (hashtags[i].length > window.settings.HASHTAGS_MAX_LENGTH) {
+          validityMessage += 'Максимальная длина одного хэш-тега' + window.settings.HASHTAGS_MAX_LENGTH + 'символов, включая решётку. ';
           break;
         }
 
@@ -282,8 +283,8 @@
     var validityMessage = '';
     if (commentElement.value) {
       var commentElementValue = commentElement.value.toLowerCase().trim();
-      if (commentElementValue.length > window.settings.commentMaxLength) {
-        validityMessage += 'Длина комментария не может составлять больше 140 символов.';
+      if (commentElementValue.length > window.settings.COMMENT_MAX_LENGTH) {
+        validityMessage += 'Длина комментария не может составлять больше' + window.settings.COMMENT_MAX_LENGTH + 'символов.';
       }
     }
 

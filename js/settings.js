@@ -1,21 +1,21 @@
 'use strict';
 (function () {
   window.settings = {
-    picturesOnPage: 25,
-    loadTimeout: 10000,
-    initialScaleValue: 100,
-    scaleRange: 25,
-    commentMaxLength: 140,
-    hashtagMaxLength: 20,
-    hashtagsMaxCount: 5,
-    filterLevelBarLength: 453,
-    initialFilterEffectsLevel: 100,
-    randomPicturesFilterCount: 10,
+    PICTURES_ON_PAGE: 25,
+    INITIAL_SCALE_VALUE: 100,
+    SCALE_RANGE: 25,
+    COMMENT_MAX_LENGTH: 140,
+    HASHTAGS_MAX_LENGTH: 20,
+    HASHTAGS_MAX_COUNT: 5,
+    FILTER_LEVEL_BAR_LENGTH: 453,
+    INITIAL_FILTER_EFFECTS_LEVEL: 100,
+    RANDOM_PICTURES_FILTER_COUNT: 10,
     API_URL: 'https://js.dump.academy/kekstagram',
     API_DATA_URL: '/data',
     API_RESPONSE_TYPE: 'json',
     API_LOAD_METHOD: 'GET',
     API_SAVE_METHOD: 'POST',
+    API_LOAD_TIMEOUT: 10000,
     ApiStatusCode: {
       OK: 200
     },

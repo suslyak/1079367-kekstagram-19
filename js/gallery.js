@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var URL = window.settings.API_URL + window.settings.API_DATA_URL;
+
   var fragment = document.createDocumentFragment();
   var picturesContainerElement = document.querySelector('.pictures');
   var filtersElement = document.querySelector('.img-filters');
@@ -7,7 +9,7 @@
   var discussedFilterElement = document.querySelector('#filter-discussed');
   var defaultFilterElement = document.querySelector('#filter-default');
   window.defaultPictures = [];
-  var URL = window.settings.API_URL + window.settings.API_DATA_URL;
+
 
   var createMockPicturesData = function (numberOfPictures) {
     var mockObjects = [];
@@ -85,7 +87,7 @@
 
   var successHandler = function (response) {
     var pictures = [];
-    var limit = (window.settings.picturesOnPage <= response.length) ? window.settings.picturesOnPage : response.length;
+    var limit = (window.settings.PICTURES_ON_PAGE <= response.length) ? window.settings.PICTURES_ON_PAGE : response.length;
     for (var i = 0; i < limit; i++) {
       var comments = [];
 
@@ -114,7 +116,7 @@
 
   var errorHandler = function (errorMessage, needMock) {
     if (needMock) {
-      insertPictures(createMockPicturesData(window.settings.picturesOnPage));
+      insertPictures(createMockPicturesData(window.settings.PICTURES_ON_PAGE));
     } else {
       var node = document.createElement('div');
       node.style = 'text-align: center; background-color: lightcoral; text-transform: none; border-radius: 30px;';
@@ -127,7 +129,7 @@
 
   var filterPicturesByRandom = function (pictures) {
     var picturesArray = window.utils.cloneObject(pictures);
-    var numberOfPictures = (window.settings.randomPicturesFilterCount < pictures.length) ? window.settings.randomPicturesFilterCount : pictures.length;
+    var numberOfPictures = (window.settings.RANDOM_PICTURES_FILTER_COUNT < pictures.length) ? window.settings.RANDOM_PICTURES_FILTER_COUNT : pictures.length;
     var randomPictures = [];
     for (var i = 0; i < numberOfPictures; i++) {
       randomPictures[i] = window.utils.getRandomArrayElement(picturesArray);

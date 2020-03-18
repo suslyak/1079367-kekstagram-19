@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var TIMEOUT = window.settings.loadTimeout;
+  var TIMEOUT = window.settings.API_LOAD_TIMEOUT;
 
   var request = function (method, url, successHandler, errorHandler, data) {
     var xhr = new XMLHttpRequest();
