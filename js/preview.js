@@ -9,6 +9,8 @@
   var bigPictureCommentsElement = bigPictureContainerElement.querySelector('.social__comments');
   var bigPictureCommentTemplate = bigPictureCommentsElement.querySelector('.social__comment');
   var bigPictureCloseElement = bigPictureContainerElement.querySelector('.big-picture__cancel');
+  var loadMoreCommentsElement = bigPictureSocialElement.querySelector('.comments-loader');
+  var comments = [];
 
   var escKeyHandler = function (event) {
     window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closePreviewHandler);
@@ -26,16 +28,10 @@
     window.addEventListener('keydown', escKeyHandler);
   };
 
-  var showPicture = function (id) {
-    var pictureObject = JSON.parse(localStorage.getItem('picture' + id));
+  var loadLomments = function (number) {
+    var commentsToload = comments.splice(0, number);
 
-    bigPictureElement.setAttribute('src', pictureObject.url);
-    bigPictureLikesElement.innerText = pictureObject.likes;
-    bigPictureDescriptionElement.innerText = pictureObject.description;
-    bigPictureCommentsCountElement.innerText = pictureObject.comments.length;
-    bigPictureCommentsElement.innerText = '';
-
-    pictureObject.comments.forEach(function (element) {
+    commentsToload.forEach(function (element) {
       var listElement = bigPictureCommentTemplate.cloneNode(true);
 
       window.utils.setAttributes(listElement.querySelector('.social__picture'), {'src': element.vatar, 'alt': element.name});
@@ -44,6 +40,30 @@
       bigPictureCommentsElement.appendChild(listElement);
     });
 
+    if (comments.length > 0) {
+      loadMoreCommentsElement.classList.remove('hidden');
+      loadMoreCommentsElement.addEventListener('click', commentsShowHandler);
+    } else {
+      loadMoreCommentsElement.classList.add('hidden');
+      loadMoreCommentsElement.removeEventListener('click', commentsShowHandler);
+    }
+  };
+
+  var commentsShowHandler = function () {
+    loadLomments(window.settings.INITIAL_COMMENTS_COUNT);
+  };
+
+  var showPicture = function (id) {
+    var pictureObject = JSON.parse(localStorage.getItem('picture' + id));
+    comments = pictureObject.comments;
+
+    bigPictureElement.setAttribute('src', pictureObject.url);
+    bigPictureLikesElement.innerText = pictureObject.likes;
+    bigPictureDescriptionElement.innerText = pictureObject.description;
+    bigPictureCommentsCountElement.innerText = pictureObject.comments.length;
+    bigPictureCommentsElement.innerText = '';
+
+    loadLomments(window.settings.INITIAL_COMMENTS_COUNT);
     openPreviewHandler();
 
     bigPictureCloseElement.addEventListener('click', closePreviewHandler);

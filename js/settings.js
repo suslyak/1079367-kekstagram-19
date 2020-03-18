@@ -19,6 +19,7 @@
     ApiStatusCode: {
       OK: 200
     },
+    INITIAL_COMMENTS_COUNT: 5,
     filters: {
       'none': {'effect': 'none'},
       'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
