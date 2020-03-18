@@ -26,6 +26,7 @@
         .content
         .querySelector('.error');
   var messageElement = null;
+  var URL = window.settings.API_URL;
 
   var escKeyHandler = function (event) {
     window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closeUploadHandler);
@@ -267,7 +268,7 @@
 
   uploadFormElement.addEventListener('submit', function (event) {
     event.preventDefault();
-    window.transactions.upload(new FormData(uploadFormElement), successFormHandler, errorFormHandler);
+    window.transactions.request(window.settings.API_SAVE_METHOD, URL, successFormHandler, errorFormHandler, new FormData(uploadFormElement));
     closeUploadHandler();
   });
 })();

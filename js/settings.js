@@ -10,6 +10,15 @@
     hashtagsMaxCount: 5,
     filterLevelBarLength: 453,
     initialFilterEffectsLevel: 100,
+    randomPicturesFilterCount: 10,
+    API_URL: 'https://js.dump.academy/kekstagram',
+    API_DATA_URL: '/data',
+    API_RESPONSE_TYPE: 'json',
+    API_LOAD_METHOD: 'GET',
+    API_SAVE_METHOD: 'POST',
+    ApiStatusCode: {
+      OK: 200
+    },
     filters: {
       'none': {'effect': 'none'},
       'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},

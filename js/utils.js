@@ -32,6 +32,33 @@
     }
   };
 
+  var generateUniqueNumbers = function (number, range) {
+    var array = [];
+    while (array.length < number) {
+      var randomNumber = getRandomIntInclusive(0, range);
+      if (array.indexOf(randomNumber) === -1) {
+        array.push(randomNumber);
+      }
+    }
+
+    return array;
+  };
+
+  var getUniqueKeys = function (items) {
+    var unique = {};
+    items.forEach(function (item) {
+      if (!unique[item]) {
+        unique[item] = true;
+      }
+    });
+
+    return Object.keys(unique);
+  };
+
+  var cloneObject = function (object) {
+    return JSON.parse(JSON.stringify(object));
+  };
+
   window.utils = {
     getRandomIntInclusive: getRandomIntInclusive,
     getRandomArrayElement: getRandomArrayElement,
@@ -39,5 +66,8 @@
     closePopup: closePopup,
     openPopup: openPopup,
     keyHandler: keyHandler,
+    generateUniqueNumbers: generateUniqueNumbers,
+    getUniqueKeys: getUniqueKeys,
+    cloneObject: cloneObject
   };
 })();
