@@ -27,6 +27,7 @@
         .querySelector('.error');
   var messageElement = null;
   var URL = window.settings.API_URL;
+  var preventEscCloseElements = [hashtagsInputElement, commentElement];
 
   var escKeyHandler = function (event) {
     window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closeUploadHandler);
@@ -67,7 +68,7 @@
   };
 
   var closeUploadHandler = function () {
-    if (![hashtagsInputElement, commentElement].includes(document.activeElement)) {
+    if (!preventEscCloseElements.includes(document.activeElement)) {
       uploadFileInputElement.value = '';
       hashtagsInputElement.value = '';
       commentElement.value = '';
@@ -192,6 +193,10 @@
     document.addEventListener('mouseup', mouseUpHandler);
   });
 
+  var indicateInvalidField = function (element, indicator) {
+    element.style.borderColor = (indicator) ? window.settings.INVALID_FIELD_BORDER_COLOR : window.settings.VALID_FIELD_BORDER_COLOR;
+  };
+
   uploadEffectElements.forEach(function (filter) {
     filter.addEventListener('click', function () {
       var filterName = filter.getAttribute('id').replace('effect-', '');
@@ -246,7 +251,7 @@
       }
 
       for (var i = 0; i < hashtags.length; i++) {
-        if (!/^#[a-z0-9]+$/.test(hashtags[i])) {
+        if (!/^#[a-zа-я0-9]+$/.test(hashtags[i])) {
           validityMessage += 'Хэш-тег должен начинаться с символа # (решётка). Хеш-тег не может состоять только из одной решётки, строка после решётки должна состоять из букв и чисел и не может содержать пробелы, символы пунктуации и спецсимволы. ';
           break;
         }
@@ -269,6 +274,8 @@
     }
 
     hashtagsInputElement.setCustomValidity(validityMessage);
+
+    indicateInvalidField(hashtagsInputElement, validityMessage);
   });
 
   commentElement.addEventListener('input', function () {
@@ -281,6 +288,8 @@
     }
 
     commentElement.setCustomValidity(validityMessage);
+
+    indicateInvalidField(commentElement, validityMessage);
   });
 
   uploadFormElement.addEventListener('submit', function (event) {

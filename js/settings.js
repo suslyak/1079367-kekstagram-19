@@ -21,6 +21,8 @@
     },
     COMMENTS_PER_PAGE: 5,
     LEGAL_FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
+    INVALID_FIELD_BORDER_COLOR: 'lightcoral',
+    VALID_FIELD_BORDER_COLOR: 'rgb(238, 238, 238)',
     filters: {
       'none': {'effect': 'none'},
       'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
