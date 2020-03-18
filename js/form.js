@@ -43,6 +43,23 @@
     uploadEffectLevelElement.classList.add('hidden');
     uploadEffectElements[0].checked = true;
 
+    var file = uploadFileInputElement.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = window.settings.LEGAL_FILE_TYPES.some(function (fileType) {
+      return fileName.endsWith(fileType);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        previewPictureElement.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+
     scaleInput.setAttribute('value', window.settings.initialScaleValue + '%');
     previewPictureElement.style.transform = 'scale(' + window.settings.initialScaleValue / 100 + ')';
 

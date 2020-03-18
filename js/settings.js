@@ -19,7 +19,8 @@
     ApiStatusCode: {
       OK: 200
     },
-    INITIAL_COMMENTS_COUNT: 5,
+    COMMENTS_PER_PAGE: 5,
+    LEGAL_FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
     filters: {
       'none': {'effect': 'none'},
       'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
