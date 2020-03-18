@@ -20,6 +20,7 @@
       OK: 200
     },
     COMMENTS_PER_PAGE: 5,
+    LEGAL_FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
     filters: {
       'none': {'effect': 'none'},
       'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
