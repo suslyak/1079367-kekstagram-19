@@ -28,7 +28,7 @@
     window.addEventListener('keydown', escKeyHandler);
   };
 
-  var loadLomments = function (number) {
+  var loadComments = function (number) {
     var commentsToload = comments.splice(0, number);
 
     commentsToload.forEach(function (element) {
@@ -50,7 +50,7 @@
   };
 
   var commentsShowHandler = function () {
-    loadLomments(window.settings.INITIAL_COMMENTS_COUNT);
+    loadComments(window.settings.COMMENTS_PER_PAGE);
   };
 
   var showPicture = function (id) {
@@ -63,7 +63,7 @@
     bigPictureCommentsCountElement.innerText = pictureObject.comments.length;
     bigPictureCommentsElement.innerText = '';
 
-    loadLomments(window.settings.INITIAL_COMMENTS_COUNT);
+    loadComments(window.settings.COMMENTS_PER_PAGE);
     openPreviewHandler();
 
     bigPictureCloseElement.addEventListener('click', closePreviewHandler);
