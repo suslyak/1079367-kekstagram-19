@@ -11,14 +11,14 @@
         var response = (data) ? 'Публикация загружена успешно.' : xhr.response;
         successHandler(response);
       } else {
-        errorHandler('Произошла ошибка. Статус ответа: ' + xhr.status + ' ' + xhr.statusText, false);
+        errorHandler('Произошла ошибка. Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
     xhr.addEventListener('error', function () {
-      errorHandler('Произошла ошибка соединения', false);
+      errorHandler('Произошла ошибка соединения');
     });
     xhr.addEventListener('timeout', function () {
-      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс', false);
+      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.timeout = TIMEOUT;

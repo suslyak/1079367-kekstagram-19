@@ -31,11 +31,11 @@
   var preventEscCloseElements = [hashtagsInputElement, commentElement];
 
   var escKeyHandler = function (event) {
-    window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closeUploadHandler);
+    window.utils.keyHandler(event, window.settings.ESC_KEY_CODE, closeUploadHandler);
   };
 
   var MessageEscKeyHandler = function (event) {
-    window.utils.keyHandler(event, window.data.ESC_KEY_CODE, function () {
+    window.utils.keyHandler(event, window.settings.ESC_KEY_CODE, function () {
       closeFormMessage();
       window.removeEventListener('keydown', MessageEscKeyHandler);
     });
@@ -142,6 +142,7 @@
     window.addEventListener('keydown', MessageEscKeyHandler);
     document.addEventListener('click', closeFormMessage);
   };
+
   var closeFormMessage = function () {
     if (messageElement) {
       messageElement.remove();
@@ -295,7 +296,9 @@
 
   uploadFormElement.addEventListener('submit', function (event) {
     event.preventDefault();
+
     window.transactions.request(window.settings.API_SAVE_METHOD, URL, successFormHandler, errorFormHandler, new FormData(uploadFormElement));
+
     closeUploadHandler();
   });
 })();

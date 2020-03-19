@@ -6,14 +6,16 @@
   var bigPictureLikesElement = bigPictureSocialElement.querySelector('.likes-count');
   var bigPictureDescriptionElement = bigPictureSocialElement.querySelector('.social__caption');
   var bigPictureCommentsCountElement = bigPictureContainerElement.querySelector('.social__comment-count');
+  var bigPictureAllCommentsElement = bigPictureCommentsCountElement.querySelector('.comments-count');
   var bigPictureCommentsElement = bigPictureContainerElement.querySelector('.social__comments');
   var bigPictureCommentTemplate = bigPictureCommentsElement.querySelector('.social__comment');
   var bigPictureCloseElement = bigPictureContainerElement.querySelector('.big-picture__cancel');
   var loadMoreCommentsElement = bigPictureSocialElement.querySelector('.comments-loader');
   var comments = [];
+  var allCommentsCount = 0;
 
   var escKeyHandler = function (event) {
-    window.utils.keyHandler(event, window.data.ESC_KEY_CODE, closePreviewHandler);
+    window.utils.keyHandler(event, window.settings.ESC_KEY_CODE, closePreviewHandler);
   };
 
   var closePreviewHandler = function () {
@@ -30,11 +32,17 @@
 
   var loadComments = function (number) {
     var commentsToload = comments.splice(0, number);
+    var shownCommentsCount = allCommentsCount - comments.length;
+    var textNode = document.createTextNode(' комментариев');
+
+    bigPictureCommentsCountElement.innerText = shownCommentsCount + ' из ';
+    bigPictureCommentsCountElement.appendChild(bigPictureAllCommentsElement);
+    bigPictureCommentsCountElement.appendChild(textNode);
 
     commentsToload.forEach(function (element) {
       var listElement = bigPictureCommentTemplate.cloneNode(true);
 
-      window.utils.setAttributes(listElement.querySelector('.social__picture'), {'src': element.vatar, 'alt': element.name});
+      window.utils.setAttributes(listElement.querySelector('.social__picture'), {'src': element.avatar, 'alt': element.name});
       listElement.querySelector('.social__text').innerText = element.message;
 
       bigPictureCommentsElement.appendChild(listElement);
@@ -56,11 +64,12 @@
   var showPicture = function (id) {
     var pictureObject = JSON.parse(localStorage.getItem('picture' + id));
     comments = pictureObject.comments;
+    allCommentsCount = pictureObject.comments.length;
 
     bigPictureElement.setAttribute('src', pictureObject.url);
     bigPictureLikesElement.innerText = pictureObject.likes;
     bigPictureDescriptionElement.innerText = pictureObject.description;
-    bigPictureCommentsCountElement.innerText = pictureObject.comments.length;
+    bigPictureAllCommentsElement.innerText = allCommentsCount;
     bigPictureCommentsElement.innerText = '';
 
     loadComments(window.settings.COMMENTS_PER_PAGE);

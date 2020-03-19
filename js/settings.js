@@ -16,13 +16,15 @@
     API_LOAD_METHOD: 'GET',
     API_SAVE_METHOD: 'POST',
     API_LOAD_TIMEOUT: 10000,
-    ApiStatusCode: {
-      OK: 200
-    },
     COMMENTS_PER_PAGE: 5,
     LEGAL_FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
     INVALID_FIELD_BORDER_COLOR: 'lightcoral',
     VALID_FIELD_BORDER_COLOR: 'rgb(238, 238, 238)',
+    ESC_KEY_CODE: 27,
+    ENTER_KEY_CODE: 13,
+    ApiStatusCode: {
+      OK: 200
+    },
     filters: {
       'none': {'effect': 'none'},
       'chrome': {'effect': 'grayscale', 'range': [0, 1], 'measure': ''},
