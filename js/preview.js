@@ -35,7 +35,7 @@
     var shownCommentsCount = allCommentsCount - comments.length;
     var textNode = document.createTextNode(' комментариев');
 
-    bigPictureCommentsCountElement.innerText = shownCommentsCount + ' из ';
+    bigPictureCommentsCountElement.textContent = shownCommentsCount + ' из ';
     bigPictureCommentsCountElement.appendChild(bigPictureAllCommentsElement);
     bigPictureCommentsCountElement.appendChild(textNode);
 
@@ -43,7 +43,7 @@
       var listElement = bigPictureCommentTemplate.cloneNode(true);
 
       window.utils.setAttributes(listElement.querySelector('.social__picture'), {'src': element.avatar, 'alt': element.name});
-      listElement.querySelector('.social__text').innerText = element.message;
+      listElement.querySelector('.social__text').textContent = element.message;
 
       bigPictureCommentsElement.appendChild(listElement);
     });
@@ -67,10 +67,10 @@
     allCommentsCount = pictureObject.comments.length;
 
     bigPictureElement.setAttribute('src', pictureObject.url);
-    bigPictureLikesElement.innerText = pictureObject.likes;
-    bigPictureDescriptionElement.innerText = pictureObject.description;
-    bigPictureAllCommentsElement.innerText = allCommentsCount;
-    bigPictureCommentsElement.innerText = '';
+    bigPictureLikesElement.textContent = pictureObject.likes;
+    bigPictureDescriptionElement.textContent = pictureObject.description;
+    bigPictureAllCommentsElement.textContent = allCommentsCount;
+    bigPictureCommentsElement.textContent = '';
 
     loadComments(window.settings.COMMENTS_PER_PAGE);
     openPreviewHandler();

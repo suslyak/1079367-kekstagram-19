@@ -8,8 +8,8 @@
     var picture = pictureTemplate.cloneNode(true);
 
     window.utils.setAttributes(picture.querySelector('.picture__img'), {'src': url, 'data-id': id});
-    picture.querySelector('.picture__comments').innerText = commentsCount;
-    picture.querySelector('.picture__likes').innerText = likes;
+    picture.querySelector('.picture__comments').textContent = commentsCount;
+    picture.querySelector('.picture__likes').textContent = likes;
 
     picture.addEventListener('click', function () {
       window.preview.show(id);

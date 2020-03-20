@@ -59,7 +59,7 @@
     var node = document.createElement('div');
     node.style = 'text-align: center; background-color: lightcoral; text-transform: none; border-radius: 30px;';
     node.style.padding = '20px';
-    node.innerText = errorMessage;
+    node.textContent = errorMessage;
     picturesContainerElement.appendChild(node);
   };
 

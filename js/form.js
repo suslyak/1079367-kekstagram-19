@@ -134,7 +134,7 @@
       message.remove();
     });
 
-    title.innerText = messageText;
+    title.textContent = messageText;
     messageElement = message;
 
     mainElement.insertAdjacentElement('afterbegin', message);
